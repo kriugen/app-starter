@@ -20,7 +20,7 @@ const settings: Item[] = ['Profile', 'Dashboard', 'Logout'];
 
 export type AppBarProps = {
   activeItemName: string,
-  user: { email?: string },
+  user?: { email?: string | null },
   itemSelected: (item: Item) => unknown,
 }
 
@@ -141,6 +141,8 @@ const ResponsiveAppBar = (props: AppBarProps) => {
 
           <Box sx={{ flexGrow: 0 }}>
 
+    { 
+        props.user ?
             <Tooltip title="Open settings">
               <Button
                 data-test='appbar-open-settings'
@@ -150,6 +152,10 @@ const ResponsiveAppBar = (props: AppBarProps) => {
                 {props.user.email}
               </Button>
             </Tooltip>
+
+            : <div>login</div>
+    }
+
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
