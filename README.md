@@ -1,3 +1,24 @@
+## Authentication
+
+Go to https://manage.auth0.com and create Regular Web Application
+
+Add the following variables to .env file:
+
+From Application Settings:
+
+AUTH0_ISSUER_BASE_URL='https://[Domain]'
+AUTH0_CLIENT_ID = '[Client ID]'
+AUTH0_CLIENT_SECRET = '[Client Secret]'
+
+Generate key (this is sample):
+AUTH0_SECRET ='889b1ddbbfa647f4f555a9e2bc12384771997237223d2aa092b7cc4645ef94ed'
+
+Use you project domain in the following variables:
+AUTH0_BASE_URL='http://localhost:3000'  - set this also to [Allowed Logout URLs]
+AUTH0_CALLBACK_URL = 'http://localhost:3000/api/auth/callback' - set this also to [Allowed Callback URLs]
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

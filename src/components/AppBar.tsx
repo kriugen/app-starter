@@ -10,17 +10,18 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import Link from 'next/link';
 
 const title = 'INVOICE-APP';
 
-export type Item = 'Profile' | 'Dashboard' | 'Logout' | 'Clients' | 'Invoices' | null;
+export type Item = 'Profile' | 'Dashboard' | 'Login' | 'Logout' | 'Clients' | 'Invoices' | null;
 const pages: Item[] = ['Clients', 'Invoices'];
 
-const settings: Item[] = ['Profile', 'Dashboard', 'Logout'];
+const settings: Item[] = ['Profile', 'Dashboard', 'Login', 'Logout'];
 
 export type AppBarProps = {
   activeItemName: string,
-  user: { email?: string },
+  user?: { email?: string | null },
   itemSelected: (item: Item) => unknown,
 }
 
@@ -141,15 +142,23 @@ const ResponsiveAppBar = (props: AppBarProps) => {
 
           <Box sx={{ flexGrow: 0 }}>
 
-            <Tooltip title="Open settings">
-              <Button
-                data-test='appbar-open-settings'
-                onClick={handleOpenUserMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {props.user.email}
-              </Button>
-            </Tooltip>
+        { 
+            props.user ?
+                <Tooltip title="Open settings">
+                <Button
+                    data-test='appbar-open-settings'
+                    onClick={handleOpenUserMenu}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                    {props.user.email}
+                </Button>
+                </Tooltip>
+
+                : <Link href="/api/auth/login">
+                    <a>Login</a>
+                </Link>
+        }
+
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"

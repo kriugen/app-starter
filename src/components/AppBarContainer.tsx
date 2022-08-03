@@ -1,9 +1,11 @@
 import { useRouter } from 'next/router';
+import { useUser } from '@auth0/nextjs-auth0';
 
 import AppBar, { Item } from "./AppBar";
 
 export default function AppBarContainer() {
   const router = useRouter();
+  const { user } = useUser();
 
   const itemSelected = (item: Item) => {
     switch (item) {
@@ -26,7 +28,7 @@ export default function AppBarContainer() {
   return (
     <AppBar 
       activeItemName={router.route.substring(router.route.indexOf('/') + 1)} 
-      user={{email: 'test@test.com'}} 
+      user={user} 
       itemSelected={itemSelected} 
     /> 
   );
