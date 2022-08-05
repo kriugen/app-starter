@@ -17,7 +17,18 @@ Use you project domain in the following variables:
 AUTH0_BASE_URL='http://localhost:3000'  - set this also to [Allowed Logout URLs]
 AUTH0_CALLBACK_URL = 'http://localhost:3000/api/auth/callback' - set this also to [Allowed Callback URLs]
 
+## Database
 
+Add the following variable to .env file:
+
+DATABASE_URL='[postgres db connection string]'
+
+Run the following commands:
+
+```bash
+npx prisma db push
+npx prisma db seed
+```
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
