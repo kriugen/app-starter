@@ -13,7 +13,7 @@ export default function AppBarContainer() {
       break;
     case 'Dashboard': router.push('/');
       break;
-    case 'Profile': router.push('/company-details');
+    case 'Profile': router.push('/profile');
       break;
     case 'Clients': router.push('/clients');
       break;
