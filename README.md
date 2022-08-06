@@ -30,6 +30,14 @@ npx prisma db push
 npx prisma db seed
 ```
 
+## Save authenticated user to app database
+
+Add AUTH0_HOOK_SECRET to .env
+Create a custom action in auth0, copy `deployment/auth0_post_login.js` content to it (replace `https://app-starter-01.loca.lt` with your app url)
+Set AUTH0_HOOK_SECRET with the same value and install `node-fetch@2.6.1` dependency. Finally, drop it into login flow.
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

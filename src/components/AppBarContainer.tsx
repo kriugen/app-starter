@@ -9,7 +9,7 @@ export default function AppBarContainer() {
 
   const itemSelected = (item: Item) => {
     switch (item) {
-    case 'Logout': console.log('+++LOGOUT');
+    case 'Logout': router.push('/api/auth/logout');;
       break;
     case 'Dashboard': router.push('/');
       break;
