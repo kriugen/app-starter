@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import prisma from '../src/lib/prisma'
 
 import Head from 'next/head'
 import Image from 'next/image'
@@ -23,9 +22,6 @@ const Home: NextPage = () => {
           This is your cover page
         </p>
 
-{
-  prisma.find
-}
         <div className={styles.grid}>
         </div>
       </main>
