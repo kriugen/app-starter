@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { prisma } from '../lib/prisma';
+import prisma from '../lib/prisma';
 import { useProfile } from '../src/components/Profile/hooks';
 import { getSession } from '@auth0/nextjs-auth0';
 
@@ -11,40 +11,45 @@ const Profile: NextPage = ({ user }) => {
         User Profile
       </div>
       <div>
-        { user?.email }
+        { user.email }
       </div>
-      {/* <div>
+      <div>
         Created At
-        { profile?.createdAt }
+        { user.createdAt }
       </div>
       <div>
         Updated At
-        { profile?.updatedAt }
-      </div> */}
+        { user.updatedAt }
+      </div>
     </>
   )
 }
 
-export const getServerSideProps = async ({ req, res, params }) => {
+export const getServerSideProps = async ({ req, res }) => {
   const { user } = getSession(req, res);
-
-  // const id = params.id;
-  // const link = await prisma.link.findUnique({
-  //   where: { id },
-  //   select: {
-  //     id: true,
-  //     title: true,
-  //     category: true,
-  //     url: true,
-  //     imageUrl: true,
-  //     description: true,
-  //   },
-  // });
+  const dbUser = await prisma.user.findUnique({
+    where: { email: user.email },
+    select: {
+      id: true,
+      email: true,
+      image: true,
+      createdAt: true,
+      updatedAt: true
+    },
+  });
   return {
     props: {
-      user,
+      user: { 
+        ...dbUser, 
+        createdAt: dateToString(dbUser?.createdAt), 
+        updatedAt: dateToString(dbUser?.updatedAt) 
+      },
     },
   };
 };
+
+function dateToString(date?: Date) {
+  return date?.toString();
+}
 
 export default Profile
