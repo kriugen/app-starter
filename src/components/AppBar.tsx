@@ -12,12 +12,12 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 
-const title = 'INVOICE-APP';
+const title = 'APP-STARTER';
 
-export type Item = 'Profile' | 'Dashboard' | 'Login' | 'Logout' | 'Clients' | 'Invoices' | null;
-const pages: Item[] = ['Clients', 'Invoices'];
+export type Item = 'Profile' | 'Logout' | 'Notes' | null;
+const pages: Item[] = ['Notes'];
 
-const settings: Item[] = ['Profile', 'Dashboard', 'Login', 'Logout'];
+const settings: Item[] = ['Profile', 'Logout'];
 
 export type AppBarProps = {
   activeItemName: string,

@@ -11,13 +11,9 @@ export default function AppBarContainer() {
     switch (item) {
     case 'Logout': router.push('/api/auth/logout');;
       break;
-    case 'Dashboard': router.push('/');
-      break;
     case 'Profile': router.push('/profile');
       break;
-    case 'Clients': router.push('/clients');
-      break;
-    case 'Invoices': router.push('/invoices');
+    case 'Notes': router.push('/notes');
       break;
 
     default:
