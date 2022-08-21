@@ -1,74 +1,30 @@
-import { ReactNode, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { Box, TextField, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
-import { DatePicker, LocalizationProvider } from "@mui/lab";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import { Controller } from "react-hook-form";
-import Autocomplete from '@mui/material/Autocomplete';
-import { ClientName } from '../api/invoices';
-import { emptyInvoice } from '../store/invoiceSlice';
-
-import { InvoiceItems } from "./InvoiceItems";
 
 const schema = yup.object({
   id: yup.string(),
-  date: yup.number().required(),
-  dueDate: yup.number().required().min(yup.ref('date'), 'Due date should be after invoice date'),
-  invoice_number: yup.string().required().min(3),
-  projectCode: yup.string().matches(/.{3,}/, {
-    excludeEmptyString: true,
-    message: 'Project Code must be 3 characters or empty',
-  }),
-  client_id: yup.string().required(),
-  items: yup.array().of(
-    yup.object({
-      description: yup.string().required("item description is required"),
-      value: yup.number().required().min(1)
-        .typeError('must be a number')
-        .positive('must be greater than 0')
-    })
-  )
+  title: yup.string().required().min(3),
+  body: yup.string().required().min(3),
 });
 
-export type InvoiceFormData = yup.InferType<typeof schema>;
+export type FormData = yup.InferType<typeof schema>;
 export type FormProps = {
-    data?: InvoiceFormData | null;
-    clients: Array<ClientName> | null;
-    disabled?: boolean;
-    genericMessage?: ReactNode;
-    onSubmit: (values: InvoiceFormData) => unknown;
+    data?: FormData | null;
+    onSubmit: (values: FormData) => unknown;
 }
 
-export const InvoiceForm = (props: FormProps) => {
-  const { data, disabled } = props;
-  const { control, reset, register, handleSubmit, formState: { errors } } = 
-    useForm<InvoiceFormData>({
+const empty = { title: '', body: '' }
+
+export const Form = (props: FormProps) => {
+  const { data } = props;
+  const { register, handleSubmit, formState: { errors } } = 
+    useForm<FormData>({
       resolver: yupResolver(schema),
-      defaultValues: { ...data ?? emptyInvoice }
+      defaultValues: { ...data ?? empty }
     });
-
-  useEffect(() => {
-    reset(data ?? emptyInvoice);
-  }, [reset, data]);
-
-  const selectClient = (value: string) => {
-    if (!props.clients || props.clients.length == 0) {
-      throw new Error('clients not initialized form invoice dropdown');
-    }
-
-    if (!value)
-      return props.clients[0];
-
-    const val = props.clients.find(c => c.id == value);
-    if (!val) {
-      throw new Error('client not found for invoice dropdown, id ' + value);
-    }
-
-    return val;
-  };
 
   if (!data)
     return null;
@@ -83,157 +39,49 @@ export const InvoiceForm = (props: FormProps) => {
       }}
     >
       <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate sx={{ mt: 1, width: 380 }}>
-        <Typography>{data?.invoice_number ? 'Edit ' : 'Create '}Invoice</Typography>
-        {
-          props.genericMessage
-        }
+        <Typography>{data?.id ? 'Edit ' : 'Create '}Note</Typography>
         <input type="hidden" {...register(`id`)} defaultValue={data?.id} />
-
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Controller
-            name="date"
-            control={control}
-            render={({
-              field: { onChange, value },
-            }) => (
-              <DatePicker
-                label="Date"
-                value={value}
-                onChange={(value: Date | null) => {
-                  onChange(value?.getTime());
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    helperText={
-                      errors.date 
-                        ? <span data-test='invoice-date-error'>{errors.date.message}</span>
-                        : " "
-                    }
-                    id="date"
-                    variant="standard"
-                    margin="dense"
-                    fullWidth
-                    color="primary"
-                    autoComplete="bday"
-                    {...params}
-                    error={!!errors.date}
-                    inputProps={{
-                      ...params.inputProps,
-                      "data-test": "invoice-date"
-                    }} 
-                  />
-                )}
-              />
-            )}
-          />
-          <Controller
-            name="dueDate"
-            control={control}
-            render={({
-              field: { onChange, value }
-            }) => (
-              <DatePicker
-                label="Due Date"
-                value={value}
-                onChange={(value: Date | null) => {
-                  onChange(value?.getTime());
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    helperText={
-                      errors.dueDate 
-                        ? <span data-test='invoice-due-date-error'>{errors.dueDate.message}</span>
-                        : " "
-                    }
-                    id="dueDate"
-                    variant="standard"
-                    margin="dense"
-                    fullWidth
-                    color="primary"
-                    autoComplete="bday"
-                    {...params}
-                    error={!!errors.dueDate}
-                    inputProps={{
-                      ...params.inputProps,
-                      "data-test": "invoice-due-date"
-                    }} 
-                  />
-                )}
-              />
-            )}
-          />
-        </LocalizationProvider>
+       
         <TextField
-          disabled={disabled}
           margin="normal"
           fullWidth
-          id="invoice_number"
+          id="title"
           label="Number"
-          autoComplete="invoice_number"
-          {...register("invoice_number")}
-          error={!!errors.invoice_number}
+          autoComplete="title"
+          {...register("title")}
+          error={!!errors.title}
           helperText={
-            errors.invoice_number 
-              ? <span data-test='invoice-number-error'>{errors.invoice_number.message}</span>
+            errors.title 
+              ? <span data-test='title-error'>{errors.title.message}</span>
               : " "
           }
           inputProps={{
-            "data-test": "invoice-number"
+            "data-test": "title"
           }}                
         />
         <TextField
-          disabled={disabled}
           margin="normal"
           fullWidth
-          id="projectCode"
-          label="Project Code"
-          autoComplete="projectCode"
-          {...register("projectCode")}
-          error={!!errors.projectCode}
+          id="body"
+          label="Number"
+          autoComplete="body"
+          {...register("body")}
+          error={!!errors.body}
           helperText={
-            errors.projectCode
-              ? <span data-test='invoice-project-code-error'>{errors.projectCode.message}</span>
+            errors.body 
+              ? <span data-test='body-error'>{errors.body.message}</span>
               : " "
           }
           inputProps={{
-            "data-test": "invoice-project-code"
+            "data-test": "body"
           }}                
         />
-        <Controller
-          name="client_id"
-          control={control}
-          render= {({
-            field: { onChange, value },
-          }) => (
-            <Autocomplete
-              disablePortal
-              onChange={(e, data) => {
-                onChange(data?.id);
-              }}
-              getOptionLabel={(client) => client.companyName}
-              id="client_id"
-              options={props.clients ?? []}
-              renderInput={(params) => 
-                <TextField 
-                  {...params} 
-                  label="Client" 
-                  inputProps={{
-                    ...params.inputProps,
-                    "data-test": "invoice-company-id"
-                  }}
-                />}
-              value={selectClient(value)}
-            />
-          )}
-        />
-        <InvoiceItems control={control} errors={errors} register={register} />
         <LoadingButton
-          loading={disabled}
           type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
-          data-test="submit-invoice"
+          data-test="submit-note"
         >
               Submit
         </LoadingButton>

@@ -10,7 +10,7 @@ const Profile: NextPage = ({ note }) => {
 
     return (
         <>
-            <div><Link href={`note/${note.id}/edit`}><a>Edit</a></Link></div>
+            <div><Link href={`/note/${note.id}/edit`}><a>Edit</a></Link></div>
             <b>{note.title}</b>
             <div>
                 {note.body}
