@@ -27,7 +27,7 @@ const Profile: NextPage = ({ user }) => {
 
 export const getServerSideProps = async ({ req, res }) => {
   const { user } = getSession(req, res);
-  const dbUser = await prisma.user.findUnique({
+  let dbUser = await prisma.user.findUnique({
     where: { email: user.email },
     select: {
       id: true,
@@ -37,6 +37,13 @@ export const getServerSideProps = async ({ req, res }) => {
       updatedAt: true
     },
   });
+
+  if (!dbUser) {
+    dbUser = await prisma.user.create({
+      data: { email: user.email },
+    });
+  }
+
   return {
     props: {
       user: { 
