@@ -1,0 +1,92 @@
+import { useForm } from "react-hook-form";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+import { Box, TextField, Typography } from "@mui/material";
+import LoadingButton from '@mui/lab/LoadingButton';
+
+const schema = yup.object({
+  id: yup.string(),
+  title: yup.string().required().min(3),
+  body: yup.string().required().min(3),
+});
+
+export type FormData = yup.InferType<typeof schema>;
+export type FormProps = {
+    data?: FormData | null;
+    onSubmit: (values: FormData) => unknown;
+}
+
+const empty = { title: '', body: '' }
+
+export const NoteEditForm = (props: FormProps) => {
+  console.log('+++FORMPROPS', props);
+  const { data } = props;
+  const { register, handleSubmit, formState: { errors } } = 
+    useForm<FormData>({
+      resolver: yupResolver(schema),
+      defaultValues: { ...data ?? empty }
+    });
+
+  if (!data)
+    return null;
+  
+  return (
+    <Box
+      sx={{
+        marginTop: 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate sx={{ mt: 1, width: 380 }}>
+        <Typography>{data?.id ? 'Edit ' : 'Create '}Note</Typography>
+        <input type="hidden" {...register(`id`)} defaultValue={data?.id} />
+       
+        <TextField
+          margin="normal"
+          fullWidth
+          id="title"
+          label="Number"
+          autoComplete="title"
+          {...register("title")}
+          error={!!errors.title}
+          helperText={
+            errors.title 
+              ? <span data-test='title-error'>{errors.title.message}</span>
+              : " "
+          }
+          inputProps={{
+            "data-test": "title"
+          }}                
+        />
+        <TextField
+          margin="normal"
+          fullWidth
+          id="body"
+          label="Number"
+          autoComplete="body"
+          {...register("body")}
+          error={!!errors.body}
+          helperText={
+            errors.body 
+              ? <span data-test='body-error'>{errors.body.message}</span>
+              : " "
+          }
+          inputProps={{
+            "data-test": "body"
+          }}                
+        />
+        <LoadingButton
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+          data-test="submit-note"
+        >
+              Submit
+        </LoadingButton>
+      </Box>
+    </Box>
+  );
+};

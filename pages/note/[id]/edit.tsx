@@ -1,91 +1,38 @@
-import { useForm } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
-import { Box, TextField, Typography } from "@mui/material";
-import LoadingButton from '@mui/lab/LoadingButton';
+import type { NextPage } from 'next'
+import prisma from '../../../lib/prisma';
+import { getSession } from '@auth0/nextjs-auth0';
+import Link from 'next/link';
+import { NoteEditForm } from '../../../src/components/Note/NoteEditForm';
 
-const schema = yup.object({
-  id: yup.string(),
-  title: yup.string().required().min(3),
-  body: yup.string().required().min(3),
-});
+const NoteEditPage: NextPage = ({ note }) => {
+    if (!note) {
+        return <div>Not Found</div>;
+    }
 
-export type FormData = yup.InferType<typeof schema>;
-export type FormProps = {
-    data?: FormData | null;
-    onSubmit: (values: FormData) => unknown;
+    return (
+        <>
+            <div><Link href={`/note/${note.id}`}><a>View</a></Link></div>
+            <NoteEditForm data={ note } onSubmit={(params) => console.log('+++ SUBMIT', params)} />
+        </>
+    )
 }
 
-const empty = { title: '', body: '' }
+export const getServerSideProps = async ({ params, req, res }) => {
+  const { user } = getSession(req, res);
+  const notes = await prisma.note.findMany({
+    where: { AND: [ { id: params.id }, { userId: user.id } ] },
+    select: {
+      id: true,
+      title: true,
+      body: true,
+    },
+  });
 
-export const Form = (props: FormProps) => {
-  const { data } = props;
-  const { register, handleSubmit, formState: { errors } } = 
-    useForm<FormData>({
-      resolver: yupResolver(schema),
-      defaultValues: { ...data ?? empty }
-    });
-
-  if (!data)
-    return null;
-  
-  return (
-    <Box
-      sx={{
-        marginTop: 8,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate sx={{ mt: 1, width: 380 }}>
-        <Typography>{data?.id ? 'Edit ' : 'Create '}Note</Typography>
-        <input type="hidden" {...register(`id`)} defaultValue={data?.id} />
-       
-        <TextField
-          margin="normal"
-          fullWidth
-          id="title"
-          label="Number"
-          autoComplete="title"
-          {...register("title")}
-          error={!!errors.title}
-          helperText={
-            errors.title 
-              ? <span data-test='title-error'>{errors.title.message}</span>
-              : " "
-          }
-          inputProps={{
-            "data-test": "title"
-          }}                
-        />
-        <TextField
-          margin="normal"
-          fullWidth
-          id="body"
-          label="Number"
-          autoComplete="body"
-          {...register("body")}
-          error={!!errors.body}
-          helperText={
-            errors.body 
-              ? <span data-test='body-error'>{errors.body.message}</span>
-              : " "
-          }
-          inputProps={{
-            "data-test": "body"
-          }}                
-        />
-        <LoadingButton
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-          data-test="submit-note"
-        >
-              Submit
-        </LoadingButton>
-      </Box>
-    </Box>
-  );
+  return {
+    props: {
+      note: notes && notes.length > 0 ? notes[0] : null,
+    },
+  };
 };
+
+export default NoteEditPage

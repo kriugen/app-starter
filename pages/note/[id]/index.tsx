@@ -3,7 +3,7 @@ import prisma from '../../../lib/prisma';
 import { getSession } from '@auth0/nextjs-auth0';
 import Link from 'next/link';
 
-const Profile: NextPage = ({ note }) => {
+const NoteViewPage: NextPage = ({ note }) => {
     if (!note) {
         return <div>Not Found</div>;
     }
@@ -37,4 +37,4 @@ export const getServerSideProps = async ({ params, req, res }) => {
   };
 };
 
-export default Profile
+export default NoteViewPage
