@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import prisma from '../../../lib/prisma';
+import { prisma } from '../../../lib/prisma';
 import { getSession } from '@auth0/nextjs-auth0';
 import Link from 'next/link';
 
