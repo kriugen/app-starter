@@ -79,6 +79,7 @@ export const CreateNoteMutation = extendType({
         const newNote = {
           title: args.title,
           body: args.body,
+          userId: ctx.user.id,
         };
 
         return await ctx.prisma.note.create({
@@ -105,7 +106,8 @@ export const UpdateNoteMutation = extendType({
           where: { id: args.id },
           data: {
             title: args.title,
-            body: args.description,
+            body: args.body,
+            userId: ctx.user.id,
           },
         });
       },
