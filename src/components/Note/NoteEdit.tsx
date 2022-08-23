@@ -18,7 +18,7 @@ export type FormProps = {
 
 const empty = { title: '', body: '' }
 
-export const NoteEditForm = (props: FormProps) => {
+export default function NoteEdit(props: FormProps) {
   const { data } = props;
   const { register, handleSubmit, formState: { errors } } = 
     useForm<FormData>({
@@ -26,8 +26,8 @@ export const NoteEditForm = (props: FormProps) => {
       defaultValues: { ...data ?? empty }
     });
 
-  if (!data)
-    return null;
+  // if (!data)
+  //   return null;
   
   return (
     <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate sx={{ mt: 1, width: 380 }}>
