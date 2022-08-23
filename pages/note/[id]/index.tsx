@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import { prisma } from '../../../lib/prisma';
 import { getSession } from '@auth0/nextjs-auth0';
 import Link from 'next/link';
+import NoteView from '../../../src/components/Note/NoteView';
 
 const NoteViewPage: NextPage = ({ note }) => {
     if (!note) {
@@ -9,13 +10,7 @@ const NoteViewPage: NextPage = ({ note }) => {
     }
 
     return (
-        <>
-            <div><Link href={`/note/${note.id}/edit`}><a>Edit</a></Link></div>
-            <b>{note.title}</b>
-            <div>
-                {note.body}
-            </div>
-        </>
+        <NoteView note={note} />
     )
 }
 
