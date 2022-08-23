@@ -1,21 +1,11 @@
 import type { NextPage } from 'next'
 import { prisma } from '../lib/prisma';
 import { getSession } from '@auth0/nextjs-auth0';
-import Link from 'next/link';
+import NoteList from '../src/components/Note/NoteList';
 
 const Profile: NextPage = ({ notes }) => {
   return (
-    <>
-    { 
-      notes.map((note) => {
-        return <div key={note.id}>
-            <Link href={`/note/${note.id}`}>
-            <a>{note.title}</a>
-          </Link>
-        </div>;
-      })
-    }
-    </>
+    <NoteList notes={ notes } />
   )
 }
 

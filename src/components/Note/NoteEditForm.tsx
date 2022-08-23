@@ -19,7 +19,6 @@ export type FormProps = {
 const empty = { title: '', body: '' }
 
 export const NoteEditForm = (props: FormProps) => {
-  console.log('+++FORMPROPS', props);
   const { data } = props;
   const { register, handleSubmit, formState: { errors } } = 
     useForm<FormData>({
@@ -31,62 +30,53 @@ export const NoteEditForm = (props: FormProps) => {
     return null;
   
   return (
-    <Box
-      sx={{
-        marginTop: 8,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate sx={{ mt: 1, width: 380 }}>
-        <Typography>{data?.id ? 'Edit ' : 'Create '}Note</Typography>
-        <input type="hidden" {...register(`id`)} defaultValue={data?.id} />
-       
-        <TextField
-          margin="normal"
-          fullWidth
-          id="title"
-          label="Number"
-          autoComplete="title"
-          {...register("title")}
-          error={!!errors.title}
-          helperText={
-            errors.title 
-              ? <span data-test='title-error'>{errors.title.message}</span>
-              : " "
-          }
-          inputProps={{
-            "data-test": "title"
-          }}                
-        />
-        <TextField
-          margin="normal"
-          fullWidth
-          id="body"
-          label="Number"
-          autoComplete="body"
-          {...register("body")}
-          error={!!errors.body}
-          helperText={
-            errors.body 
-              ? <span data-test='body-error'>{errors.body.message}</span>
-              : " "
-          }
-          inputProps={{
-            "data-test": "body"
-          }}                
-        />
-        <LoadingButton
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-          data-test="submit-note"
-        >
-              Submit
-        </LoadingButton>
-      </Box>
+    <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate sx={{ mt: 1, width: 380 }}>
+      <Typography>{data?.id ? 'Edit ' : 'Create '}Note</Typography>
+      <input type="hidden" {...register(`id`)} defaultValue={data?.id} />
+      
+      <TextField
+        margin="normal"
+        fullWidth
+        id="title"
+        label="Number"
+        autoComplete="title"
+        {...register("title")}
+        error={!!errors.title}
+        helperText={
+          errors.title 
+            ? <span data-test='title-error'>{errors.title.message}</span>
+            : " "
+        }
+        inputProps={{
+          "data-test": "title"
+        }}                
+      />
+      <TextField
+        margin="normal"
+        fullWidth
+        id="body"
+        label="Number"
+        autoComplete="body"
+        {...register("body")}
+        error={!!errors.body}
+        helperText={
+          errors.body 
+            ? <span data-test='body-error'>{errors.body.message}</span>
+            : " "
+        }
+        inputProps={{
+          "data-test": "body"
+        }}                
+      />
+      <LoadingButton
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+        data-test="submit-note"
+      >
+            Submit
+      </LoadingButton>
     </Box>
   );
 };
