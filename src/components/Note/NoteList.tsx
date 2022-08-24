@@ -10,12 +10,24 @@ import IconButton from '@mui/material/IconButton';
 import { Fab, ListItemButton } from '@mui/material';
 import Link from 'next/link';
 import NoteEdit from './NoteEdit';
+import { gql, useMutation } from '@apollo/client';
+
+const CREATE_NOTE = gql`
+  mutation CreateNote($title: String!, $body: String!) {
+    createNote(title: $title, body: $body) {
+      id
+      title
+      body
+    }
+  }
+`;
 
 export default function NoteList({ notes }) {
+  const [createNote, { data, loading, error }] = useMutation(CREATE_NOTE);
+
   const [ add, setAdd ] = useState(false);
-  console.log('+++ADD', add);
   if (add) {
-    return <NoteEdit />
+    return <NoteEdit onSubmit={(note) => createNote({ variables: note })} />
   }
 
   return (

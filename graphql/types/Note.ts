@@ -76,10 +76,17 @@ export const CreateNoteMutation = extendType({
         //  if (!user || user.role !== 'ADMIN') {
         //   throw new Error(`You do not have permission to perform action`);
         // }
+
+        const user = await ctx.prisma.user.findUnique({
+          where: {
+            email: ctx.user.email,
+          },
+        });
+
         const newNote = {
           title: args.title,
           body: args.body,
-          userId: ctx.user.id,
+          userId: user.id,
         };
 
         return await ctx.prisma.note.create({
