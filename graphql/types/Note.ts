@@ -5,7 +5,7 @@ export const Note = objectType({
   name: 'Note',
   definition(t) {
     t.string('id');
-    t.int('userId');
+    t.string('userId');
     t.string('title');
     t.string('body');
   },
@@ -101,13 +101,21 @@ export const UpdateNoteMutation = extendType({
         title: stringArg(),
         body: stringArg(),
       },
-      resolve(_parent, args, ctx) {
+      async resolve(_parent, args, ctx) {
+        console.log('-++ UPDATE', args);
+
+        const user = await ctx.prisma.user.findUnique({
+            where: {
+              email: ctx.user.email,
+            },
+          });
+
         return ctx.prisma.note.update({
           where: { id: args.id },
           data: {
             title: args.title,
             body: args.body,
-            userId: ctx.user.id,
+            userId: user.id,
           },
         });
       },
