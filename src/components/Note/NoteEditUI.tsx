@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -14,6 +15,8 @@ export type FormData = yup.InferType<typeof schema>;
 export type FormProps = {
     data?: FormData | null;
     onSubmit: (values: FormData) => unknown;
+    disabled?: boolean;
+    genericMessage?: ReactNode;
 }
 
 const empty = { title: '', body: '' }
@@ -32,8 +35,10 @@ export default function NoteEditUI(props: FormProps) {
   return (
     <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate sx={{ mt: 1, width: 380 }}>
       <Typography>{data?.id ? 'Edit ' : 'Create '}Note</Typography>
+      {
+        props.genericMessage
+      }
       <input type="hidden" {...register(`id`)} defaultValue={data?.id} />
-      
       <TextField
         margin="normal"
         fullWidth
@@ -69,6 +74,7 @@ export default function NoteEditUI(props: FormProps) {
         }}                
       />
       <LoadingButton
+        loading={ props.disabled }
         type="submit"
         fullWidth
         variant="contained"
