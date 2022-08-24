@@ -1,82 +1,30 @@
-import { useForm } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
-import { Box, TextField, Typography } from "@mui/material";
-import LoadingButton from '@mui/lab/LoadingButton';
+import { gql, useMutation } from '@apollo/client'
 
-const schema = yup.object({
-  id: yup.string(),
-  title: yup.string().required().min(3),
-  body: yup.string().required().min(3),
-});
+import NoteEditUI from '../../../src/components/Note/NoteEditUI';
 
-export type FormData = yup.InferType<typeof schema>;
-export type FormProps = {
-    data?: FormData | null;
-    onSubmit: (values: FormData) => unknown;
+const UPDATE_NOTE = gql`
+  mutation UpdateNote($title: String, $body: String, $updateNoteId: String) {
+    updateNote(title: $title, body: $body, id: $updateNoteId) {
+      id
+      userId
+      title
+      body
+    }
+  }
+`;
+
+const NoteEdit = ({ note }) => {
+  const [updateNote, { data, loading, error }] = useMutation(UPDATE_NOTE);
+
+    if (!note) {
+        return <div>Not Found</div>;
+    }
+
+    return (
+      <NoteEditUI data={ note } onSubmit={
+        (note) => updateNote({ variables: { ...note, updateNoteId: note.id }})
+      } />
+    )
 }
 
-const empty = { title: '', body: '' }
-
-export default function NoteEdit(props: FormProps) {
-  const { data } = props;
-  const { register, handleSubmit, formState: { errors } } = 
-    useForm<FormData>({
-      resolver: yupResolver(schema),
-      defaultValues: { ...data ?? empty }
-    });
-
-  // if (!data)
-  //   return null;
-  
-  return (
-    <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate sx={{ mt: 1, width: 380 }}>
-      <Typography>{data?.id ? 'Edit ' : 'Create '}Note</Typography>
-      <input type="hidden" {...register(`id`)} defaultValue={data?.id} />
-      
-      <TextField
-        margin="normal"
-        fullWidth
-        id="title"
-        label="Number"
-        autoComplete="title"
-        {...register("title")}
-        error={!!errors.title}
-        helperText={
-          errors.title 
-            ? <span data-test='title-error'>{errors.title.message}</span>
-            : " "
-        }
-        inputProps={{
-          "data-test": "title"
-        }}                
-      />
-      <TextField
-        margin="normal"
-        fullWidth
-        id="body"
-        label="Number"
-        autoComplete="body"
-        {...register("body")}
-        error={!!errors.body}
-        helperText={
-          errors.body 
-            ? <span data-test='body-error'>{errors.body.message}</span>
-            : " "
-        }
-        inputProps={{
-          "data-test": "body"
-        }}                
-      />
-      <LoadingButton
-        type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
-        data-test="submit-note"
-      >
-            Submit
-      </LoadingButton>
-    </Box>
-  );
-};
+export default NoteEdit
