@@ -14,7 +14,7 @@ const UPDATE_NOTE = gql`
   }
 `;
 
-const NoteEdit = ({ note }) => {
+const NoteEdit = ({ note, onDone }) => {
   const [updateNote, { data, loading, error }] = useMutation(UPDATE_NOTE);
 
     if (!note) {
@@ -24,8 +24,9 @@ const NoteEdit = ({ note }) => {
     return (
       <NoteEditUI data={ note } 
       onSubmit={
-        (note) => updateNote({ variables: { ...note, updateNoteId: note.id }})
-      } 
+        (note) => { updateNote({ variables: { ...note, updateNoteId: note.id }});
+        onDone(note); 
+      }} 
       genericMessage={
         error
           ? (
