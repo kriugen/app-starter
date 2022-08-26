@@ -22,7 +22,7 @@ const CREATE_NOTE = gql`
   }
 `;
 
-export default function NoteList({ notes }) {
+export default function NoteList({ notes, onSelected }) {
   const [createNote, { data, loading, error }] = useMutation(CREATE_NOTE);
 
   const [ add, setAdd ] = useState(false);
@@ -42,11 +42,9 @@ export default function NoteList({ notes }) {
               </IconButton>
             }
           >
-            <Link href={`/note/${note.id}`}>
-            <ListItemButton component="a">
+            <ListItemButton component="a" onClick={() => onSelected(note)}>
                 <ListItemText primary={ note.title } />
             </ListItemButton>
-            </Link>
         </ListItem>
         ))}
       </List>
