@@ -12,6 +12,7 @@ const Profile: NextPage = (params) => {
   const [notes, setNotes] = useState(params.notes);
   const [note, setNote] = useState(null);
   const [edit, setEdit] = useState(false);
+  const [dirty, setDirty] = useState(false);
   return (
     <Grid container spacing={2}>
       <Grid xs={3}>
@@ -21,12 +22,14 @@ const Profile: NextPage = (params) => {
             New Note
         </Button>
       </Container>
-        <NoteList onSelected={(note) => setNote(note)} notes={ notes } />
+        <NoteList onSelected={(note) => { setEdit(false); setNote(note) }} notes={ notes } />
       </Grid>
       <Grid xs={9}>
         { 
           edit 
-            ? <NoteEdit onDone={(note) => {
+            ? <NoteEdit 
+              onChange={(dirty) => { setDirty(dirty); } } 
+              onDone={(note) => {
               setNote(note);
               let n = notes.find(n => n.id == note.id);
               if (n) {

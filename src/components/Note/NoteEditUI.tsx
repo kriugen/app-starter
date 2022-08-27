@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -15,6 +15,7 @@ export type FormData = yup.InferType<typeof schema>;
 export type FormProps = {
     note?: FormData | null;
     onSubmit: (values: FormData) => unknown;
+    onChange: (isDirty: boolean) => unknown;
     disabled?: boolean;
     genericMessage?: ReactNode;
 }
@@ -23,11 +24,16 @@ const empty = { title: '', body: '' }
 
 export default function NoteEditUI(props: FormProps) {
   const { note } = props;
-  const { register, watch, handleSubmit, formState: { errors } } = 
+  const { register, watch, handleSubmit, formState } = 
     useForm<FormData>({
       resolver: yupResolver(schema),
       defaultValues: { ...note ?? empty }
     });
+
+  const errors = formState.errors;
+  useEffect(() => {
+     props.onChange(formState.isDirty);
+  }, [props, formState])
 
   const title = watch('title');
   const body = watch('body');

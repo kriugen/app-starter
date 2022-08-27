@@ -24,10 +24,11 @@ const CREATE_NOTE = gql`
   }
 `;
 
-const NoteEdit = ({ note, onDone }) => {
+const NoteEdit = ({ note, onDone, onChange }) => {
   const [noteCommand, { data, loading, error }] = useMutation(note ? UPDATE_NOTE : CREATE_NOTE);
     return (
       <NoteEditUI note={ note }
+      onChange={onChange}
       onSubmit={
         (note) => { 
         noteCommand({ variables: note });
