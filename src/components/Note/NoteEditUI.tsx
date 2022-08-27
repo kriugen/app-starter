@@ -13,7 +13,7 @@ const schema = yup.object({
 
 export type FormData = yup.InferType<typeof schema>;
 export type FormProps = {
-    data?: FormData | null;
+    note?: FormData | null;
     onSubmit: (values: FormData) => unknown;
     disabled?: boolean;
     genericMessage?: ReactNode;
@@ -22,28 +22,25 @@ export type FormProps = {
 const empty = { title: '', body: '' }
 
 export default function NoteEditUI(props: FormProps) {
-  const { data } = props;
+  const { note } = props;
   const { register, handleSubmit, formState: { errors } } = 
     useForm<FormData>({
       resolver: yupResolver(schema),
-      defaultValues: { ...data ?? empty }
+      defaultValues: { ...note ?? empty }
     });
 
-  // if (!data)
-  //   return null;
-  
   return (
     <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate sx={{ mt: 1, width: 380 }}>
-      <Typography>{data?.id ? 'Edit ' : 'Create '}Note</Typography>
+      <Typography>{note?.id ? 'Edit ' : 'Create '}Note</Typography>
       {
         props.genericMessage
       }
-      <input type="hidden" {...register(`id`)} defaultValue={data?.id} />
+      <input type="hidden" {...register(`id`)} defaultValue={note?.id} />
       <TextField
         margin="normal"
         fullWidth
         id="title"
-        label="Number"
+        label="Title"
         autoComplete="title"
         {...register("title")}
         error={!!errors.title}
@@ -60,7 +57,7 @@ export default function NoteEditUI(props: FormProps) {
         margin="normal"
         fullWidth
         id="body"
-        label="Number"
+        label="Body"
         autoComplete="body"
         {...register("body")}
         error={!!errors.body}

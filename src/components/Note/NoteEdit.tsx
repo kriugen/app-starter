@@ -25,14 +25,9 @@ const CREATE_NOTE = gql`
 `;
 
 const NoteEdit = ({ note, onDone }) => {
-  const [noteCommand, { data, loading, error }] = useMutation(note.id ? UPDATE_NOTE : CREATE_NOTE);
-
-    if (!note) {
-        return <div>Not Found</div>;
-    }
-
+  const [noteCommand, { data, loading, error }] = useMutation(note ? UPDATE_NOTE : CREATE_NOTE);
     return (
-      <NoteEditUI data={ note } 
+      <NoteEditUI note={ note }
       onSubmit={
         (note) => { 
         noteCommand({ variables: note });
@@ -47,7 +42,7 @@ const NoteEdit = ({ note, onDone }) => {
             </Alert>
           )
           : ((data && !loading) && <Alert data-test='form-success' severity='info'>
-            {note.id ? 'Updated' : 'Created'}&nbsp;Successfully!
+            {note ? 'Updated' : 'Created'}&nbsp;Successfully!
           </Alert>)
         }
         disabled={loading}

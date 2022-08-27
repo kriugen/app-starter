@@ -17,7 +17,7 @@ const Profile: NextPage = (params) => {
       <Grid xs={3}>
       <Container>
         <Button color="primary" variant="contained" aria-label="add"
-          onClick={() => setEdit(true)}>
+          onClick={() => { setNote(null); setEdit(true)}}>
             New Note
         </Button>
       </Container>
@@ -28,9 +28,13 @@ const Profile: NextPage = (params) => {
           edit 
             ? <NoteEdit onDone={(note) => {
               setNote(note);
-              const n = notes.find(n => n.id == note.id);
-              n.title = note.title;
-              n.body = note.body;
+              let n = notes.find(n => n.id == note.id);
+              if (n) {
+                n.title = note.title;
+                n.body = note.body;
+              } else {
+                notes.push(note);
+              }
               setNotes(notes);
               setEdit(false);
             }} note={note} />
