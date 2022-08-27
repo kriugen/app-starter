@@ -24,13 +24,18 @@ const empty = { title: '', body: '' }
 
 export default function NoteEditUI(props: FormProps) {
   const { note } = props;
-  const { register, watch, handleSubmit, formState } = 
+  const { register, reset, watch, handleSubmit, formState } = 
     useForm<FormData>({
       resolver: yupResolver(schema),
       defaultValues: { ...note ?? empty }
     });
 
   const errors = formState.errors;
+
+  useEffect(() => {
+      reset(props.note);
+  }, [props.note]);
+  
   useEffect(() => {
      props.onChange(formState.isDirty);
   }, [props, formState])

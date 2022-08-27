@@ -11,38 +11,32 @@ import { Container, Button } from '@mui/material';
 const Profile: NextPage = (params) => {
   const [notes, setNotes] = useState(params.notes);
   const [note, setNote] = useState(null);
-  const [edit, setEdit] = useState(false);
   const [dirty, setDirty] = useState(false);
   return (
     <Grid container spacing={2}>
       <Grid xs={3}>
       <Container>
         <Button color="primary" variant="contained" aria-label="add"
-          onClick={() => { setNote(null); setEdit(true)}}>
+          onClick={() => { setNote(null); }}>
             New Note
         </Button>
       </Container>
-        <NoteList onSelected={(note) => { setEdit(false); setNote(note) }} notes={ notes } />
+        <NoteList onSelected={(note) => { setNote(note) }} notes={ notes } />
       </Grid>
       <Grid xs={9}>
-        { 
-          edit 
-            ? <NoteEdit 
-              onChange={(dirty) => { setDirty(dirty); } } 
-              onDone={(note) => {
-              setNote(note);
-              let n = notes.find(n => n.id == note.id);
-              if (n) {
-                n.title = note.title;
-                n.body = note.body;
-              } else {
-                notes.push(note);
-              }
-              setNotes(notes);
-              setEdit(false);
-            }} note={note} />
-            : <NoteView onEdit={() => setEdit(true)} note={note} /> 
-        }
+        <NoteEdit 
+          onChange={(dirty) => { setDirty(dirty); } } 
+          onDone={(note) => {
+          setNote(note);
+          let n = notes.find(n => n.id == note.id);
+          if (n) {
+            n.title = note.title;
+            n.body = note.body;
+          } else {
+            notes.push(note);
+          }
+          setNotes(notes);
+        }} note={note} />
       </Grid>
     </Grid>
   )
