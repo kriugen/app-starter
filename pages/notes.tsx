@@ -6,6 +6,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useState } from 'react';
 import NoteEdit from '../src/components/Note/NoteEdit';
 import NoteView from '../src/components/Note/NoteView';
+import { Container, Button } from '@mui/material';
 
 const Profile: NextPage = (params) => {
   const [notes, setNotes] = useState(params.notes);
@@ -14,6 +15,12 @@ const Profile: NextPage = (params) => {
   return (
     <Grid container spacing={2}>
       <Grid xs={3}>
+      <Container>
+        <Button color="primary" variant="contained" aria-label="add"
+          onClick={() => setEdit(true)}>
+            New Note
+        </Button>
+      </Container>
         <NoteList onSelected={(note) => setNote(note)} notes={ notes } />
       </Grid>
       <Grid xs={9}>
