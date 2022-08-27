@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 
 const schema = yup.object({
@@ -23,24 +23,27 @@ const empty = { title: '', body: '' }
 
 export default function NoteEditUI(props: FormProps) {
   const { note } = props;
-  const { register, handleSubmit, formState: { errors } } = 
+  const { register, watch, handleSubmit, formState: { errors } } = 
     useForm<FormData>({
       resolver: yupResolver(schema),
       defaultValues: { ...note ?? empty }
     });
 
+  const title = watch('title');
+  const body = watch('body');
+
   return (
     <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate sx={{ mt: 1, width: 380 }}>
-      <Typography>{note?.id ? 'Edit ' : 'Create '}Note</Typography>
       {
         props.genericMessage
       }
       <input type="hidden" {...register(`id`)} defaultValue={note?.id} />
       <TextField
+        InputLabelProps={{shrink: false}}
         margin="normal"
         fullWidth
         id="title"
-        label="Title"
+        label={title ? '' : "Title" }
         autoComplete="title"
         {...register("title")}
         error={!!errors.title}
@@ -54,11 +57,13 @@ export default function NoteEditUI(props: FormProps) {
         }}                
       />
       <TextField
+        InputLabelProps={{shrink: false}}
         margin="normal"
         fullWidth
+        multiline
+        rows={4}
         id="body"
-        label="Body"
-        autoComplete="body"
+        label={body ? '' : "Body"}
         {...register("body")}
         error={!!errors.body}
         helperText={
