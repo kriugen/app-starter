@@ -16,6 +16,7 @@ export type FormProps = {
     note?: FormData | null;
     onSubmit: (values: FormData) => unknown;
     onChange: (isDirty: boolean) => unknown;
+    onDelete: (note: FormData) => unknown;
     disabled?: boolean;
     genericMessage?: ReactNode;
 }
@@ -49,7 +50,7 @@ export default function NoteEditUI(props: FormProps) {
         props.genericMessage
       }
       <input type="hidden" {...register(`id`)} defaultValue={note?.id} />
-      <Button sx={{float: "right" }}>Delete</Button>
+      <Button sx={{float: "right" }} onClick={() => props.onDelete(note)}>Delete</Button>
       <TextField
         InputLabelProps={{shrink: false}}
         margin="normal"

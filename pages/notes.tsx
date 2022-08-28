@@ -12,15 +12,16 @@ const Profile: NextPage = (params) => {
   const [note, setNote] = useState(null);
   const [dirty, setDirty] = useState(false);
   return (
-    <Grid container spacing={2}>
-      <Grid xs={3}>
-      <Container>
-        <Button color="primary" variant="contained" aria-label="add"
-          onClick={() => { setNote(null); }}>
-            New Note
-        </Button>
-      </Container>
-        <NoteList onSelected={(note) => { setNote(note) }} notes={ notes } />
+    <Grid container spacing={1} sx={{height: "200px"}}>
+      <Grid xs={3} sx={{backgroundColor: "red"}}>
+        <Container>
+          <Button color="primary" variant="contained" aria-label="add"
+            onClick={() => { setNote(null); }}>
+              New Note
+          </Button>
+        </Container>
+        <NoteList  
+          onSelected={(note) => { setNote(note) }} notes={ notes } />
       </Grid>
       <Grid xs={9}>
         <NoteEdit 
@@ -35,7 +36,14 @@ const Profile: NextPage = (params) => {
             notes.push(note);
           }
           setNotes(notes);
-        }} note={note} />
+        }} 
+        onDeleted={(note) => {
+          const index = notes.findIndex(n => n.id == note.id);
+          notes.splice(index, 1);
+          setNotes(notes);
+          setNote(null);
+        }}
+        note={note} />
       </Grid>
     </Grid>
   )
