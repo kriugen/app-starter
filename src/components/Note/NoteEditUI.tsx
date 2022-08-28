@@ -31,10 +31,9 @@ export default function NoteEditUI(props: FormProps) {
     });
 
   const errors = formState.errors;
-
   useEffect(() => {
-      reset(props.note);
-  }, [props.note]);
+      reset(note ?? empty);
+  }, [note]);
   
   useEffect(() => {
      props.onChange(formState.isDirty);
@@ -86,16 +85,18 @@ export default function NoteEditUI(props: FormProps) {
           "data-test": "body"
         }}                
       />
-      <LoadingButton
-        loading={ props.disabled }
-        type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
-        data-test="submit-note"
-      >
-            Submit
-      </LoadingButton>
+      { formState.isDirty &&
+        <LoadingButton
+          loading={ props.disabled }
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+          data-test="submit-note"
+        >
+              Submit
+        </LoadingButton> 
+      }
     </Box>
   );
 };

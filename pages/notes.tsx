@@ -5,7 +5,6 @@ import NoteList from '../src/components/Note/NoteList';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useState } from 'react';
 import NoteEdit from '../src/components/Note/NoteEdit';
-import NoteView from '../src/components/Note/NoteView';
 import { Container, Button } from '@mui/material';
 
 const Profile: NextPage = (params) => {

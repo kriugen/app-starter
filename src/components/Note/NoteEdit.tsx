@@ -36,15 +36,10 @@ const NoteEdit = ({ note, onDone, onChange }) => {
       }}
 
       genericMessage={
-        error
-          ? (
-            <Alert data-test="form-error" severity="error">
+        error && 
+          <Alert data-test="form-error" severity="error">
               {error.message}
-            </Alert>
-          )
-          : ((data && !loading) && <Alert data-test='form-success' severity='info'>
-            {note ? 'Updated' : 'Created'}&nbsp;Successfully!
-          </Alert>)
+          </Alert>
         }
         disabled={loading}
       />
