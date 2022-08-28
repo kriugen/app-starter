@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { Box, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 
 const schema = yup.object({
@@ -43,11 +43,13 @@ export default function NoteEditUI(props: FormProps) {
   const body = watch('body');
 
   return (
-    <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate sx={{ mt: 1, width: 380 }}>
+    <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate 
+      sx={{ m: 1 }}>
       {
         props.genericMessage
       }
       <input type="hidden" {...register(`id`)} defaultValue={note?.id} />
+      <Button sx={{float: "right" }}>Delete</Button>
       <TextField
         InputLabelProps={{shrink: false}}
         margin="normal"
@@ -71,7 +73,7 @@ export default function NoteEditUI(props: FormProps) {
         margin="normal"
         fullWidth
         multiline
-        rows={4}
+        rows={20}
         id="body"
         label={body ? '' : "Body"}
         {...register("body")}

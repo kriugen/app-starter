@@ -30,9 +30,9 @@ const NoteEdit = ({ note, onDone, onChange }) => {
       <NoteEditUI note={ note }
       onChange={onChange}
       onSubmit={
-        (note) => { 
-        noteCommand({ variables: note });
-        onDone(note); 
+        async (note) => { 
+        const result = await noteCommand({ variables: note });
+        onDone(result.data.createNote ?? result.data.updateNote); 
       }}
 
       genericMessage={
