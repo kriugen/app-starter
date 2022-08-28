@@ -21,7 +21,7 @@ const Profile: NextPage = (params) => {
           </Button>
         </Container>
         <NoteList  
-          onSelected={(note) => { setNote(note) }} notes={ notes } />
+          onSelected={(note) => { setNote(note) }} selectedNote={ note } notes={ notes } />
       </Grid>
       <Grid xs={9}>
         <NoteEdit 
