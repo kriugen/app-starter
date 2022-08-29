@@ -39,9 +39,18 @@ const Profile: NextPage = (params) => {
         }} 
         onDeleted={(note) => {
           const index = notes.findIndex(n => n.id == note.id);
+          let nextNote = null;
+          if (index + 1 == notes.length) {
+            if (notes.length > 1) {
+              nextNote = notes[0];
+            }
+          } else {
+            nextNote = notes[index + 1];
+          }
+
+          setNote(nextNote);
           notes.splice(index, 1);
           setNotes(notes);
-          setNote(null);
         }}
         note={note} />
       </Grid>
