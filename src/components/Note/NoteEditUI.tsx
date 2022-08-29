@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 
 const schema = yup.object({
@@ -15,8 +15,6 @@ export type FormData = yup.InferType<typeof schema>;
 export type FormProps = {
     note?: FormData | null;
     onSubmit: (values: FormData) => unknown;
-    onChange: (isDirty: boolean) => unknown;
-    onDelete: (note: FormData) => unknown;
     disabled?: boolean;
     genericMessage?: ReactNode;
 }
@@ -36,10 +34,6 @@ export default function NoteEditUI(props: FormProps) {
       reset(note ?? empty);
   }, [note]);
   
-  useEffect(() => {
-     props.onChange(formState.isDirty);
-  }, [props, formState])
-
   const title = watch('title');
   const body = watch('body');
 

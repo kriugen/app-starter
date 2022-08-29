@@ -24,24 +24,10 @@ const CREATE_NOTE = gql`
   }
 `;
 
-const DELETE_NOTE = gql`
-  mutation DeleteNote($id: String!) {
-    deleteNote(id: $id) {
-      id
-    }
-  }
-`;
-
-const NoteEdit = ({ note, onDone, onChange }) => {
+const NoteEdit = ({ note, onDone }) => {
   const [noteCommand, { data, loading, error }] = useMutation(note ? UPDATE_NOTE : CREATE_NOTE);
-  const [deleteNote, deleteState] = useMutation(DELETE_NOTE);
-
   return (
       <NoteEditUI note={ note }
-      onChange={onChange}
-      onDelete={(note) => {
-        deleteNote({variables: { id: note.id }});
-      }}
       onSubmit={
         async (note) => { 
         const result = await noteCommand({ variables: note });

@@ -6,11 +6,21 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useState } from 'react';
 import NoteEdit from '../src/components/Note/NoteEdit';
 import { Container, Button } from '@mui/material';
+import { gql, useMutation } from '@apollo/client'
 
-const Profile: NextPage = (params) => {
+const DELETE_NOTE = gql`
+  mutation DeleteNote($id: String!) {
+    deleteNote(id: $id) {
+      id
+    }
+  }
+`;
+
+const Notes: NextPage = (params) => {
+  const [deleteNote, deleteState] = useMutation(DELETE_NOTE);
+
   const [notes, setNotes] = useState(params.notes);
   const [note, setNote] = useState(null);
-  const [dirty, setDirty] = useState(false);
   return (
     <Grid container spacing={1} sx={{height: "200px"}}>
       <Grid xs={3} sx={{backgroundColor: "red"}}>
@@ -25,7 +35,9 @@ const Profile: NextPage = (params) => {
       </Grid>
       <Grid xs={9}>
         <Button disabled={!note} sx={{float: "right" }} 
-          onClick={() => {
+          onClick={async () => {
+            await deleteNote({variables: { id: note.id }});
+
             const index = notes.findIndex(n => n.id == note.id);
             let nextNote = null;
             if (index + 1 == notes.length) {
@@ -41,7 +53,6 @@ const Profile: NextPage = (params) => {
             setNotes(notes);
           }}>Delete</Button>
         <NoteEdit 
-          onChange={(dirty) => { setDirty(dirty); } } 
           onDone={(note) => {
           setNote(note);
           let n = notes.find(n => n.id == note.id);
@@ -77,4 +88,4 @@ export const getServerSideProps = async ({ req, res }) => {
   };
 };
 
-export default Profile
+export default Notes
