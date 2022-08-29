@@ -24,6 +24,22 @@ const Profile: NextPage = (params) => {
           onSelected={(note) => { setNote(note) }} selectedNote={ note } notes={ notes } />
       </Grid>
       <Grid xs={9}>
+        <Button disabled={!note} sx={{float: "right" }} 
+          onClick={() => {
+            const index = notes.findIndex(n => n.id == note.id);
+            let nextNote = null;
+            if (index + 1 == notes.length) {
+              if (notes.length > 1) {
+                nextNote = notes[0];
+              }
+            } else {
+              nextNote = notes[index + 1];
+            }
+  
+            setNote(nextNote);
+            notes.splice(index, 1);
+            setNotes(notes);
+          }}>Delete</Button>
         <NoteEdit 
           onChange={(dirty) => { setDirty(dirty); } } 
           onDone={(note) => {
@@ -37,21 +53,6 @@ const Profile: NextPage = (params) => {
           }
           setNotes(notes);
         }} 
-        onDeleted={(note) => {
-          const index = notes.findIndex(n => n.id == note.id);
-          let nextNote = null;
-          if (index + 1 == notes.length) {
-            if (notes.length > 1) {
-              nextNote = notes[0];
-            }
-          } else {
-            nextNote = notes[index + 1];
-          }
-
-          setNote(nextNote);
-          notes.splice(index, 1);
-          setNotes(notes);
-        }}
         note={note} />
       </Grid>
     </Grid>

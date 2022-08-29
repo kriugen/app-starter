@@ -32,7 +32,7 @@ const DELETE_NOTE = gql`
   }
 `;
 
-const NoteEdit = ({ note, onDone, onChange, onDeleted }) => {
+const NoteEdit = ({ note, onDone, onChange }) => {
   const [noteCommand, { data, loading, error }] = useMutation(note ? UPDATE_NOTE : CREATE_NOTE);
   const [deleteNote, deleteState] = useMutation(DELETE_NOTE);
 
@@ -41,7 +41,6 @@ const NoteEdit = ({ note, onDone, onChange, onDeleted }) => {
       onChange={onChange}
       onDelete={(note) => {
         deleteNote({variables: { id: note.id }});
-        onDeleted(note);
       }}
       onSubmit={
         async (note) => { 
