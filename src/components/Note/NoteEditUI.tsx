@@ -50,7 +50,7 @@ export default function NoteEditUI(props: FormProps) {
         props.genericMessage
       }
       <input type="hidden" {...register(`id`)} defaultValue={note?.id} />
-      <Button sx={{float: "right" }} onClick={() => props.onDelete(note)}>Delete</Button>
+      <Button disabled={!note} sx={{float: "right" }} onClick={() => props.onDelete(note)}>Delete</Button>
       <TextField
         InputLabelProps={{shrink: false}}
         margin="normal"
