@@ -54,7 +54,6 @@ const Notes: NextPage = (params) => {
           }}>Delete</Button>
         <NoteEdit 
           onDone={(note) => {
-          setNote(note);
           let n = notes.find(n => n.id == note.id);
           if (n) {
             n.title = note.title;
@@ -62,7 +61,8 @@ const Notes: NextPage = (params) => {
           } else {
             notes.push(note);
           }
-          setNotes(notes);
+          console.log('+NOTES', notes);
+          setNotes([...notes]);
         }} 
         note={note} />
       </Grid>

@@ -1,28 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Box } from "@mui/material";
 
 export default function NoteEditUI2({ note, onSubmit }) {
-  const [title, setTitle] = useState(note?.title);
-  const [body, setBody] = useState(note?.body);
+  const titleInput = useRef(null);
+  const bodyInput = useRef(null);
+
   useEffect(() => {
-    setTitle(note?.title);
+    titleInput.current.value = note?.title ?? '';
+    bodyInput.current.value = note?.body ?? '';
   }, [note]);
 
-  function submitTitle(val) {
-    setTitle(val);
-    onSubmit({id: note?.id, title: val, body});
-  }
-
-  function submitBody(val) {
-    setBody(val);
-    onSubmit({id: note?.id, title, body: val});
+  const timeout = 1000;
+  let timer;
+  function change() {
+    console.log(titleInput.current.value)
+      clearTimeout(timer);
+      timer = setTimeout(() => {  
+        onSubmit({id: note?.id, 
+          title: titleInput.current.value, 
+          body: bodyInput.current.value});
+    }, timeout);
   }
 
   return (
     <Box>
-      <input type='hidden' value={note.id} />
-      <input type='text' value={title} onChange={(e) => submitTitle(e.target.value)} />
-      <input type='text' value={body} onChange={(e) => submitBody(e.target.value)} />
+      <input ref={titleInput} type='text' onChange={(e) => change()} />
+      <input ref={bodyInput} type='text' onChange={(e) => change()} />
     </Box>
   );
 };
