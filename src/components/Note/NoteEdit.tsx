@@ -1,7 +1,7 @@
 import { gql, useMutation } from '@apollo/client'
 import { Alert } from '@mui/material';
 
-import NoteEditUI from '../../../src/components/Note/NoteEditUI2';
+import NoteEditUI from '../../../src/components/Note/NoteEditUI3';
 
 const UPDATE_NOTE = gql`
   mutation UpdateNote($title: String, $body: String, $id: String) {
