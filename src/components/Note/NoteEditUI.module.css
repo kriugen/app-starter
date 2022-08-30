@@ -1,0 +1,15 @@
+.base {
+    display: block;
+    width: 100%;
+    border: 0;
+    outline: none;
+}
+
+.title {
+    composes: base;
+}
+
+.body {
+    composes: base;
+
+}
