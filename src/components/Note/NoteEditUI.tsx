@@ -1,98 +1,21 @@
-import { ReactNode, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
-import { Box, TextField } from "@mui/material";
-import LoadingButton from '@mui/lab/LoadingButton';
+import { Box } from "@mui/material";
+import { DebounceInput } from 'react-debounce-input'
+import styles from './NoteEditUI.module.css'
 
-const schema = yup.object({
-  id: yup.string(),
-  title: yup.string().required().min(3),
-  body: yup.string().required().min(3),
-});
-
-export type FormData = yup.InferType<typeof schema>;
-export type FormProps = {
-    note?: FormData | null;
-    onSubmit: (values: FormData) => unknown;
-    disabled?: boolean;
-    genericMessage?: ReactNode;
-}
-
-const empty = { title: '', body: '' }
-
-export default function NoteEditUI(props: FormProps) {
-  const { note } = props;
-  const { register, reset, watch, handleSubmit, formState } = 
-    useForm<FormData>({
-      resolver: yupResolver(schema),
-      defaultValues: { ...note ?? empty }
+export default function NoteEditUI3({ note, onSubmit }) {
+  function submit({title, body }: { title?: string, body?: string}) {
+    onSubmit({
+      id: note?.id, 
+      title: title || note?.title, 
+      body: body || note?.body 
     });
-
-  const errors = formState.errors;
-  useEffect(() => {
-      reset(note ?? empty);
-  }, [note]);
-  
-  const title = watch('title');
-  const body = watch('body');
-
+  }
   return (
-    <Box component="form" onSubmit={handleSubmit(props.onSubmit)} noValidate 
-      sx={{ m: 1 }}>
-      {
-        props.genericMessage
-      }
-      <input type="hidden" {...register(`id`)} defaultValue={note?.id} />
-      <TextField
-        InputLabelProps={{shrink: false}}
-        margin="normal"
-        fullWidth
-        id="title"
-        label={title ? '' : "Title" }
-        autoComplete="title"
-        {...register("title")}
-        error={!!errors.title}
-        helperText={
-          errors.title 
-            ? <span data-test='title-error'>{errors.title.message}</span>
-            : " "
-        }
-        inputProps={{
-          "data-test": "title"
-        }}                
-      />
-      <TextField
-        InputLabelProps={{shrink: false}}
-        margin="normal"
-        fullWidth
-        multiline
-        rows={20}
-        id="body"
-        label={body ? '' : "Body"}
-        {...register("body")}
-        error={!!errors.body}
-        helperText={
-          errors.body 
-            ? <span data-test='body-error'>{errors.body.message}</span>
-            : " "
-        }
-        inputProps={{
-          "data-test": "body"
-        }}                
-      />
-      { formState.isDirty &&
-        <LoadingButton
-          loading={ props.disabled }
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-          data-test="submit-note"
-        >
-              Submit
-        </LoadingButton> 
-      }
+    <Box>
+      <DebounceInput element={'textarea'} placeholder='Title' className={styles.title} type='text' debounceTimeout={500} value={note?.title} 
+        onChange={(e) => submit({ title: e.target.value })} />
+      <DebounceInput element={'textarea'} rows="5" placeholder='Body' className={styles.body} type='text' debounceTimeout={500} value={note?.body} 
+        onChange={(e) => submit({ body: e.target.value })} />
     </Box>
   );
 };
