@@ -64,8 +64,8 @@ export const CreateNoteMutation = extendType({
     t.nonNull.field('createNote', {
       type: Note,
       args: {
-        title: nonNull(stringArg()),
-        body: nonNull(stringArg()),
+        title: stringArg(),
+        body: stringArg(),
       },
       async resolve(_parent, args, ctx) {
         // const user = await ctx.prisma.user.findUnique({

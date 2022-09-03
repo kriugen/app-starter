@@ -61,7 +61,6 @@ const Notes: NextPage = (params) => {
           } else {
             notes.push(note);
           }
-          console.log('+NOTES', notes);
           setNotes([...notes]);
         }} 
         note={note} />

@@ -15,7 +15,7 @@ const UPDATE_NOTE = gql`
 `;
 
 const CREATE_NOTE = gql`
-  mutation CreateNote($title: String!, $body: String!) {
+  mutation CreateNote($title: String, $body: String) {
     createNote(title: $title, body: $body) {
       id
       title
@@ -29,8 +29,14 @@ const NoteEdit = ({ note, onDone }) => {
   return (
       <NoteEditUI note={ note }
       onSubmit={
-        async (note) => { 
+        async (note) => {
+        console.log('++submit', noteCommand, note);
+        try {
         const result = await noteCommand({ variables: note });
+        } catch (e) {
+          console.log('+ERRORS', JSON.stringify(e, null, 2));
+          throw e;
+        }
         onDone(result.data.createNote ?? result.data.updateNote); 
       }}
 
