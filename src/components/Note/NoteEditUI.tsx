@@ -6,7 +6,7 @@ export default function NoteEditUI3({ note, onSubmit }) {
   function submit({title, body }: { title?: string, body?: string}) {
     onSubmit({
       id: note?.id, 
-      title: (title || note?.title) ?? '', 
+      title: (title || note?.title) ?? 'Untitled', 
       body: (body || note?.body) ?? ''
     });
   }

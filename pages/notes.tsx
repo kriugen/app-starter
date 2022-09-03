@@ -17,6 +17,10 @@ const DELETE_NOTE = gql`
 `;
 
 const Notes: NextPage = (params) => {
+  if (params.notes == null) {
+    return <div>Please login</div>
+  }
+
   const [deleteNote, deleteState] = useMutation(DELETE_NOTE);
 
   const [notes, setNotes] = useState(params.notes);
@@ -70,9 +74,16 @@ const Notes: NextPage = (params) => {
 }
 
 export const getServerSideProps = async ({ req, res }) => {
-  const { user } = getSession(req, res);
-  const notes = await prisma.note.findMany({
-    where: { userId: user.id },
+  const session = getSession(req, res);
+  if (!session)
+    return {
+      props: {
+        notes: null,
+      },
+    };
+
+    const notes = await prisma.note.findMany({
+    where: { userId: session.user.id },
     select: {
       id: true,
       title: true,
