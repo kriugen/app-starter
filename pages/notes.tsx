@@ -66,6 +66,7 @@ const Notes: NextPage = (params) => {
             notes.push(note);
           }
           setNotes([...notes]);
+          setNote(note);
         }} 
         note={note} />
       </Grid>
