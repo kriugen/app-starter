@@ -9,6 +9,10 @@ export default function NoteEditUI3({ note, onSubmit }) {
   useEffect(() => {
     titleRef.current.value = note?.title || '';
     bodyRef.current.value = note?.body || '';
+
+    if (!note) {
+      titleRef.current.focus();
+    }
   }, [note]);
 
   let throttling = false;
