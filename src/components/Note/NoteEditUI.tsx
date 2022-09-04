@@ -1,23 +1,43 @@
 import { Box } from "@mui/material";
-import { DebounceInput } from 'react-debounce-input'
+import { useEffect, useRef } from "react";
 import styles from './NoteEditUI.module.css'
 
 export default function NoteEditUI3({ note, onSubmit }) {
-  function submit({title, body }: { title?: string, body?: string}) {
-    onSubmit({
+  const titleRef = useRef();
+  const bodyRef = useRef();
+
+  useEffect(() => {
+    titleRef.current.value = note?.title || '';
+    bodyRef.current.value = note?.body || '';
+  }, [note]);
+
+  let throttling = false;
+  let timer;
+
+  function submit() {
+    throttle(() => {
+      onSubmit({
       id: note?.id, 
-      title: (title || note?.title) ?? 'Untitled', 
-      body: (body || note?.body) ?? ''
+      title: titleRef.current.value, 
+      body: bodyRef.current.value
     });
+
+    window.clearTimeout(timer);
+    throttling = false;
+  })};
+
+  function throttle(f) {
+    if (!throttling) {
+      throttling = true;
+      timer = window.setTimeout(f, 1000);
+    }
   }
   return (
     <Box>
-      <DebounceInput element={'textarea'} placeholder='Title' 
-        className={styles.title} type='text' debounceTimeout={500} value={note?.title ?? ''} 
-        onChange={(e) => submit({ title: e.target.value })} />
-      <DebounceInput element={'textarea'} rows="5" placeholder='Body' 
-        className={styles.body} type='text' debounceTimeout={500} value={note?.body ?? ''} 
-        onChange={(e) => submit({ body: e.target.value })} />
+      <textarea ref={titleRef} placeholder='Title' 
+        className={styles.title} onChange={(e) => { submit()}} />
+      <textarea ref={bodyRef} rows={5} placeholder='Body' 
+        className={styles.body} onChange={(e) => { submit()}} />
     </Box>
   );
 };
