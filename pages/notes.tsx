@@ -5,8 +5,9 @@ import NoteList from '../src/components/Note/NoteList';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useState } from 'react';
 import NoteEdit from '../src/components/Note/NoteEdit';
-import { Container, Button } from '@mui/material';
+import { Container, Button, Snackbar, IconButton } from '@mui/material';
 import { gql, useMutation } from '@apollo/client'
+import CloseIcon from '@mui/icons-material/Close';
 
 const DELETE_NOTE = gql`
   mutation DeleteNote($id: String!) {
@@ -25,8 +26,44 @@ const Notes: NextPage = (params) => {
 
   const [notes, setNotes] = useState(params.notes);
   const [note, setNote] = useState(null);
+  const [deletingNote, setDeletingNote] = useState(null);
+
+  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason != 'undo') {
+      deleteNote({variables: { id: deletingNote.id }});
+      setDeletingNote(null);
+
+      console.log('delete!');
+    }
+  };
+  
+  const action = (
+    <>
+      <Button color="secondary" size="small" onClick={(e) => handleClose(e, 'undo')}>
+        UNDO
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  );
+
   return (
     <Grid container spacing={1} sx={{height: "200px"}}>
+      <Grid xs={12}>
+      <Snackbar
+        open={!!deletingNote}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Note deleted"
+        action={action}
+      />
+      </Grid>
       <Grid xs={3}>
         <Container>
           <Button color="primary" variant="contained" aria-label="add"
@@ -40,8 +77,6 @@ const Notes: NextPage = (params) => {
       <Grid xs={9}>
         <Button disabled={!note} sx={{float: "right" }} 
           onClick={async () => {
-            await deleteNote({variables: { id: note.id }});
-
             const index = notes.findIndex(n => n.id == note.id);
             let nextNote = null;
             if (index + 1 == notes.length) {
@@ -51,10 +86,12 @@ const Notes: NextPage = (params) => {
             } else {
               nextNote = notes[index + 1];
             }
-  
+
             setNote(nextNote);
             notes.splice(index, 1);
             setNotes(notes);
+            
+            setDeletingNote(note);
           }}>Delete</Button>
         <NoteEdit 
           onDone={(note) => {
@@ -67,7 +104,7 @@ const Notes: NextPage = (params) => {
             setNote(note);
           }
           setNotes([...notes]);
-        }} 
+        }}
         note={note} />
       </Grid>
     </Grid>
