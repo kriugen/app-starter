@@ -18,7 +18,7 @@ export default function NoteEditUI3({ note, onSubmit }) {
     throttle(() => {
       onSubmit({
       id: note?.id, 
-      title: titleRef.current.value, 
+      title: titleRef.current.value || 'Untitled', 
       body: bodyRef.current.value
     });
 
