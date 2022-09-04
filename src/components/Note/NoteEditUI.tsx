@@ -29,7 +29,7 @@ export default function NoteEditUI3({ note, onSubmit }) {
   function throttle(f) {
     if (!throttling) {
       throttling = true;
-      timer = window.setTimeout(f, 1000);
+      timer = window.setTimeout(f, 300);
     }
   }
   return (

@@ -30,13 +30,14 @@ const Notes: NextPage = (params) => {
   const [noteIndex, setNoteIndex] = useState(-1);
 
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    console.log('reason', reason);
     if (reason == 'undo') {
       notes.splice(noteIndex, 0, deletingNote);
       setNote(deletingNote);
       setNotes(notes);
     } else {
-      deleteNote({variables: { id: deletingNote.id }});
-      console.log('delete!');
+      if (deletingNote)
+        deleteNote({variables: { id: deletingNote.id }});
     }
 
     setDeletingNote(null);
@@ -80,7 +81,7 @@ const Notes: NextPage = (params) => {
           onSelected={(note) => { setNote(note) }} selectedNote={ note } notes={ notes } />
       </Grid>
       <Grid xs={9}>
-        <Button disabled={!note} sx={{float: "right" }} 
+        <Button disabled={ !note || !!deletingNote } sx={{float: "right" }} 
           onClick={async () => {
             const index = notes.findIndex(n => n.id == note.id);
             setNoteIndex(index);
