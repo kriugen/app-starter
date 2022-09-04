@@ -60,16 +60,8 @@ const Notes: NextPage = (params) => {
   );
 
   return (
-    <Grid container spacing={1} sx={{height: "200px"}}>
-      <Grid xs={12}>
-      <Snackbar
-        open={!!deletingNote}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message="Note deleted"
-        action={action}
-      />
-      </Grid>
+    <>
+    <Grid container sx={{height: "200px"}}>
       <Grid xs={3}>
         <Container>
           <Button color="primary" variant="contained" aria-label="add"
@@ -115,6 +107,14 @@ const Notes: NextPage = (params) => {
         note={note} />
       </Grid>
     </Grid>
+    <Snackbar
+        open={!!deletingNote}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Note deleted"
+        action={action}
+      />
+    </>
   )
 }
 

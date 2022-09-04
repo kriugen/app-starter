@@ -5,16 +5,18 @@ import { ListItemButton } from '@mui/material';
 
 export default function NoteList({ notes, onSelected, selectedNote }) {
   return (
-    <List sx={{maxHeight: '100%', overflow: 'auto', width: '250px'}}>
-      {notes.map((note) => (
-        <NoteListItem 
-          key={note.id}
-          note={ note }
-          selectedNote={ selectedNote }
-          onSelected = {(note) => { onSelected(note); }}
-          />
-      ))}
-    </List>
+    <div  style={{ maxHeight: '83vh', overflow: 'auto' }}>
+      <List>
+        {notes.map((note) => (
+          <NoteListItem 
+            key={note.id}
+            note={ note }
+            selectedNote={ selectedNote }
+            onSelected = {(note) => { onSelected(note); }}
+            />
+        ))}
+      </List>
+    </div>
   );
 }
 
