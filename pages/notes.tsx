@@ -5,7 +5,7 @@ import NoteList from '../src/components/Note/NoteList';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useState } from 'react';
 import NoteEdit from '../src/components/Note/NoteEdit';
-import { Container, Button, Snackbar, IconButton } from '@mui/material';
+import { Container, Button, Snackbar, IconButton, Alert } from '@mui/material';
 import { gql, useMutation } from '@apollo/client'
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -19,7 +19,7 @@ const DELETE_NOTE = gql`
 
 const Notes: NextPage = (params) => {
   if (params.notes == null) {
-    return <div>Please login</div>
+    return <Alert data-test="login-error" severity="error">Please login</Alert>
   }
 
   const [deleteNote, deleteState] = useMutation(DELETE_NOTE);
