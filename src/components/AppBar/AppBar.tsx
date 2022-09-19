@@ -102,7 +102,7 @@ const ResponsiveAppBar = (props: AppBarProps) => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
+                <MenuItem data-test={page} key={page} onClick={() => handleCloseNavMenu(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -130,6 +130,7 @@ const ResponsiveAppBar = (props: AppBarProps) => {
             {pages.map((page) => (
               <Button
                 key={page}
+                data-test={page}
                 data-active={isActive(page)}
                 onClick={() => handleCloseNavMenu(page)}
                 sx={{ my: 2, display: 'block', color: 
