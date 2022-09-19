@@ -64,7 +64,7 @@ const Notes: NextPage = (params) => {
     <Grid container sx={{height: "200px"}}>
       <Grid xs={3}>
         <Container>
-          <Button color="primary" variant="contained" aria-label="add"
+          <Button data-test='new-note-button' color="primary" variant="contained" aria-label="add"
             onClick={() => { setNote(null); }}>
               New Note
           </Button>

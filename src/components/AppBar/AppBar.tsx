@@ -156,7 +156,7 @@ const ResponsiveAppBar = (props: AppBarProps) => {
                 </Tooltip>
 
                 : <Link href="/api/auth/login">
-                    <a>Login</a>
+                    <a data-test='login-button'>Login</a>
                 </Link>
         }
 
