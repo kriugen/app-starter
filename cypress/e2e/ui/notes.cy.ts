@@ -11,6 +11,18 @@ describe('notes', () => {
     cy.visit('/notes');
     cy.getBySel('new-note-button').should('exist');
   })
+
+  it.only('adds note by changing title', () => {
+    cy.login();
+    cy.visit('/notes');
+    cy.getBySel('new-note-button').should('exist');
+
+    cy.getBySel('title').type('note 1');
+    cy.wait(500);
+
+    cy.getBySel('note-list-item').first().should('contain', 'note 1');
+
+  })
 })
 
 export {}

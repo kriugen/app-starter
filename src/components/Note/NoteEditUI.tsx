@@ -38,9 +38,9 @@ export default function NoteEditUI3({ note, onSubmit }) {
   }
   return (
     <Box>
-      <textarea ref={titleRef} placeholder='Title' 
+      <textarea data-test='title' ref={titleRef} placeholder='Title' 
         className={styles.title} onChange={(e) => { submit()}} />
-      <textarea ref={bodyRef} rows={5} placeholder='Body' 
+      <textarea data-test='body' ref={bodyRef} rows={5} placeholder='Body' 
         className={styles.body} onChange={(e) => { submit()}} />
     </Box>
   );

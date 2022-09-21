@@ -27,7 +27,7 @@ function NoteListItem({ note, selectedNote, onSelected }) {
 
     return text;
   }
-  return <ListItem>
+  return <ListItem data-test='note-list-item'>
           <ListItemButton component="a" 
             selected={ selectedNote && selectedNote.id == note.id }
             onClick={() => { onSelected(note)}}>
