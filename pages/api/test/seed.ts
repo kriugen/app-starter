@@ -8,8 +8,25 @@ export default async function handler(
   res: NextApiResponse<any>
 ) {
   try {
-    const r = await prisma.note.deleteMany({});
-    res.status(200).json(r);
+    await prisma.note.deleteMany({});
+    await prisma.user.deleteMany({});
+
+    const user = await prisma.user.create({
+      data: { email: 'borisbars1978@gmail.com' }
+    })
+
+    await prisma.note.createMany({ data: [{
+        title: 'note 1',
+        body: 'body 1',
+        userId: user.id,
+      }, { 
+        title: 'note 2',
+        body: 'body 2',
+        userId: user.id,
+      }
+    ]});
+
+    res.status(200).json('ok');
   } catch (e) {
     console.error(e);
     res.status(500).send('Internal Server Error');
