@@ -23,6 +23,7 @@
     "@mui/material": "^5.9.3",
     "@prisma/client": "^3.7.0",
     "apollo-server-micro": "^3.10.1",
+    "axios": "^0.27.2",
     "cross-env": "^7.0.3",
     "graphql": "^16.6.0",
     "graphql-relay": "^0.10.0",

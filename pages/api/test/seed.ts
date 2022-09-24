@@ -10,7 +10,7 @@ export default function handler(
     prisma.note.deleteMany({}).then(r => {
       res.status(200).json(r);
     }).catch ((e) => {
-    console.error('+++TEST DELETE ALL ERROR', e);
-    res.status(500).send('Internal Server Error Deleting All Notes');
+    console.error(e);
+    res.status(500).send('Internal Server Error');
   });
 }

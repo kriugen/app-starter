@@ -1,8 +1,10 @@
 import { defineConfig } from "cypress";
 const encrypt = require('cypress-nextjs-auth0/encrypt');
+import axios from "axios";
 
 export default defineConfig({
   env: {
+    apiUrl: "http://localhost:3000/api",
     auth0Audience: "https://supercards.auth0.com/api/v2/",
     auth0Domain: "supercards.auth0.com",
     auth0ClientId: "sLF6P0hH94ScpkMR458FR2B3YEP79bLB",
@@ -19,7 +21,13 @@ export default defineConfig({
     baseUrl: 'http://localhost:3000',
     watchForFileChanges: false,
     setupNodeEvents(on, config) {
-        on('task', { encrypt });
+        const testDataApiEndpoint = `${config.env.apiUrl}/test`;
+        on('task', { 
+          encrypt,
+          async "db:seed"() {
+            const { data } = await axios.post(`${testDataApiEndpoint}/seed`);
+            return data;
+          }, });
     },
   },
 });

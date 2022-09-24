@@ -13,15 +13,21 @@ describe('notes', () => {
   })
 
   it.only('adds note by changing title', () => {
+    cy.task("db:seed");
     cy.login();
     cy.visit('/notes');
     cy.getBySel('new-note-button').should('exist');
 
     cy.getBySel('title').type('note 1');
-    cy.wait(500);
+    cy.wait(1000);
 
-    cy.getBySel('note-list-item').first().should('contain', 'note 1');
+    const notes = cy.getBySel('note-list-item');
+    notes.should('have.length', 1);
+    notes.first().should('contain', 'note 1');
 
+    // cy.get('li a').each((e, i) => {
+    //   console.log('+++TEST ' + i, e.prop('outerHTML'))
+    //})
   })
 })
 
