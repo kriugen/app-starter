@@ -16,6 +16,17 @@ describe('notes', () => {
       });
   })
 
+  it('adds note by changing body', () => {
+    cy.getBySel('new-note-button').click();
+    cy.getBySel('note-list-item').then((items) => {
+      const itemCount = items.length;
+      cy.getBySel('body').type('test note').then(() =>
+      cy.getBySel('note-list-item')
+        .should('have.length', itemCount + 1)
+        .last().should('contain', 'Untitled'));
+      });
+  })
+
   it('edits note by changing title', () => {
     cy.getBySel('note-list-item')
       .first()
