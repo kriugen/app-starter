@@ -73,7 +73,7 @@ const Notes: NextPage = (params) => {
           onSelected={(note) => { setNote(note) }} selectedNote={ note } notes={ notes } />
       </Grid>
       <Grid xs={9}>
-        <Button disabled={ !note || !!deletingNote } sx={{float: "right" }} 
+        <Button data-test='delete-note-button' disabled={ !note || !!deletingNote } sx={{float: "right" }} 
           onClick={async () => {
             const index = notes.findIndex(n => n.id == note.id);
             setNoteIndex(index);
