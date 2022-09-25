@@ -18,16 +18,15 @@ describe('notes', () => {
     cy.visit('/notes');
     cy.getBySel('new-note-button').should('exist');
 
-    cy.getBySel('title').type('note 1');
-    cy.wait(1000);
+    cy.getBySel('note-list-item').then((e) => {
+      const itemCount = e.length;
+      cy.getBySel('title').type('test note');
+      cy.wait(1000);
 
-    const notes = cy.getBySel('note-list-item');
-    notes.should('have.length', 1);
-    notes.first().should('contain', 'note 1');
-
-    // cy.get('li a').each((e, i) => {
-    //   console.log('+++TEST ' + i, e.prop('outerHTML'))
-    //})
+      cy.getBySel('note-list-item')
+        .should('have.length', itemCount + 1)
+        .last().should('contain', 'test note');
+    });
   })
 })
 
