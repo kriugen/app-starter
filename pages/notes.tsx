@@ -17,12 +17,23 @@ const DELETE_NOTE = gql`
   }
 `;
 
+const CREATE_NOTE = gql`
+  mutation CreateNote($title: String, $body: String) {
+    createNote(title: $title, body: $body) {
+      id
+      title
+      body
+    }
+  }
+`;
+
 const Notes: NextPage = (params) => {
   if (params.notes == null) {
     return <Alert data-test="login-error" severity="error">Please login</Alert>
   }
 
   const [deleteNote, deleteState] = useMutation(DELETE_NOTE);
+  const [createNote, createState] = useMutation(CREATE_NOTE);
 
   const [notes, setNotes] = useState(params.notes);
   const [note, setNote] = useState(first(params.notes));
@@ -65,7 +76,13 @@ const Notes: NextPage = (params) => {
       <Grid xs={3}>
         <Container>
           <Button data-test='new-note-button' color="primary" variant="contained" aria-label="add"
-            onClick={() => { setNote(null); }}>
+            onClick={async (e) => {
+                const result = await createNote({ variables: { title: 'Untitled', body: '' }});
+                const note = result.data.createNote;
+                notes.push(note);
+                setNote(note);
+                e.preventDefault();
+              }}>
               New Note
           </Button>
         </Container>
@@ -95,13 +112,8 @@ const Notes: NextPage = (params) => {
         <NoteEdit 
           onDone={(note) => {
           let n = notes.find(n => n.id == note.id);
-          if (n) {
-            n.title = note.title;
-            n.body = note.body;
-          } else {
-            notes.push(note);
-            setNote(note);
-          }
+          n.title = note.title;
+          n.body = note.body;
           setNotes([...notes]);
         }}
         note={note} />

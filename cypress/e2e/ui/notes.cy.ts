@@ -10,15 +10,14 @@ describe('notes', () => {
       .first().should('have.class', 'Mui-selected');
   });
 
-  it('adds note by changing title', () => {
-    cy.getBySel('new-note-button').click();
+  it('adds note by clicking on new note', () => {
     cy.getBySel('note-list-item').then((items) => {
       const itemCount = items.length;
-      cy.getBySel('title').type('test note').then(() =>
-      cy.getBySel('note-list-item')
-        .should('have.length', itemCount + 1)
-        .last().should('contain', 'test note'));
-      });
+      cy.getBySel('new-note-button').click()
+        .then(() => cy.getBySel('note-list-item')
+          .should('have.length', itemCount + 1)
+          .last().should('contain', 'Untitled'));
+        });
   })
 
   it('adds note by changing body', () => {

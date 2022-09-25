@@ -14,29 +14,14 @@ const UPDATE_NOTE = gql`
   }
 `;
 
-const CREATE_NOTE = gql`
-  mutation CreateNote($title: String, $body: String) {
-    createNote(title: $title, body: $body) {
-      id
-      title
-      body
-    }
-  }
-`;
-
 const NoteEdit = ({ note, onDone }) => {
-  const [noteCommand, { data, loading, error }] = useMutation(note ? UPDATE_NOTE : CREATE_NOTE);
+  const [noteCommand, { data, loading, error }] = useMutation(UPDATE_NOTE);
   return (
       <NoteEditUI note={ note }
       onSubmit={
         async (note) => {
-        try {
           const result = await noteCommand({ variables: note });
-          onDone(result.data.createNote ?? result.data.updateNote); 
-        } catch (e) {
-          console.log('+ERRORS', JSON.stringify(e, null, 2));
-          throw e;
-        }
+          onDone(result.data.updateNote); 
       }}
 
       genericMessage={
