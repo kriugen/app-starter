@@ -5,6 +5,11 @@ describe('notes', () => {
     cy.visit('/notes');
   })
 
+  it('checks UI state on load', () => {
+    cy.getBySel('note-list-item').find('a')
+      .first().should('have.class', 'Mui-selected');
+  });
+
   it('adds note by changing title', () => {
     cy.getBySel('new-note-button').click();
     cy.getBySel('note-list-item').then((items) => {

@@ -25,7 +25,7 @@ const Notes: NextPage = (params) => {
   const [deleteNote, deleteState] = useMutation(DELETE_NOTE);
 
   const [notes, setNotes] = useState(params.notes);
-  const [note, setNote] = useState(null);
+  const [note, setNote] = useState(first(params.notes));
   const [deletingNote, setDeletingNote] = useState(null);
   const [noteIndex, setNoteIndex] = useState(-1);
 
@@ -142,5 +142,13 @@ export const getServerSideProps = async ({ req, res }) => {
     },
   };
 };
+
+function first(items) {
+  if (!items || items.length == 0) {
+    return null;
+  }
+
+  return items[0];
+}
 
 export default Notes
