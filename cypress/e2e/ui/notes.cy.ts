@@ -45,9 +45,7 @@ describe('notes', () => {
   })
 
   it('deletes note', () => {
-    cy.getBySel('delete-note-button').should('be.disabled');
     cy.getBySel('note-list-item').first().click().then(() => {
-      cy.getBySel('delete-note-button').should('be.enabled');
       cy.getBySel('note-list-item').then((items) => {
         const len = items.length;
         cy.getBySel('delete-note-button').click().then(() =>
