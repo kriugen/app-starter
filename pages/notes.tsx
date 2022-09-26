@@ -120,6 +120,7 @@ const Notes: NextPage = (params) => {
       </Grid>
     </Grid>
     <Snackbar
+        data-test="undo-delete-popup"
         open={!!deletingNote}
         autoHideDuration={6000}
         onClose={handleClose}
